@@ -1,4 +1,8 @@
-from collections import Counter, defaultdict
+import heapq
+from bisect import bisect_left, bisect_right
+from collections import Counter, defaultdict, deque
+
+from sortedcontainers import SortedDict, SortedList, SortedSet
 
 from common_package import common
 
@@ -51,14 +55,14 @@ print(positive, negative)
 
 
 """
-list: 配列
+list: 配列 Array
 
 sequence[start:end:step]
-start: designate start place
-end: designate end place
+start: designate start place. an element on this place is included.
+end: designate end place. an element on this place is 'not' included.
 step (can be removed): designate slice step number/ default is 1
 """
-common.divider("list")
+common.divider("list(Array)")
 numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 print(numbers)
 
@@ -74,6 +78,7 @@ print(
     numbers[::-2]
 )  # ステップ数にマイナスを指定すると逆順になる。 Output[10, 8, 6, 4, 2]
 
+common.divider("list-operation")
 # operation of list
 numbers.append(11)
 print(numbers)
@@ -94,6 +99,28 @@ if numbers:  # not empty
     print("numbers is not empty")
 if not numbers:  # empty
     print("numbers is empty")
+
+## List(Array)に関するもの
+"""
+リスト内包表記: List comprehension
+リストを生成するコードを短くする方法。
+    = [<値> <繰り返し範囲> <条件(option)>]
+"""
+common.divider("List comprehension")
+squares = [i**2 for i in range(5)]
+print(squares)
+
+squares = [i**2 for i in range(5) if i % 2 == 0]
+print(squares)
+"""
+2次元配列 (2d Array)
+"""
+common.divider("2d array")
+# 3 * 4の2次元配列の例
+two_dim_array = [[0] * 3 for i in range(4)]
+two_dim_array[0][1] = two_dim_array[1][1] = 1  # 0,1行目、2列目に1を代入
+print(two_dim_array)
+
 
 """
 tuple: 
@@ -221,3 +248,168 @@ tuple   	○   	×       	○
 set     	×   	×       	×
 dictionary	○ [1]	○       	×
 """
+
+"""
+キュー(Queue)
+deque クラス
+FIFOキューを提供する。
+追加:append
+左から取り出し:popleft
+右から取り出し:pop
+"""
+common.divider("キュー(Queue)")
+queue = deque()
+queue.append(1)
+queue.append(2)
+queue.append(3)
+print(queue)
+
+queue.pop()
+print(queue)
+
+queue.popleft()
+print(queue)
+
+"""
+ヒープ(Heap)
+データ構造。特定の順序でデータを保存する。
+ヒープを使うと、必ず一番優先順位が高いものを取り出すことができる(最小値)。
+import heapq モジュールは最小の要素が常にルート(インデックス0)になる。
+"""
+common.divider("ヒープ(Heap)")
+## 最小ヒープ
+min_heap = []
+heapq.heappush(min_heap, 4)
+heapq.heappush(min_heap, 2)
+heapq.heappush(min_heap, 5)
+print(min_heap[0])
+while min_heap:
+    print(heapq.heappop(min_heap))
+
+## 最大ヒープ。値をネガティブにして実現する
+## heapqには最大ヒープを実現する機能はない
+max_heap = []
+heapq.heappush(max_heap, -4)
+heapq.heappush(max_heap, -2)
+heapq.heappush(max_heap, -5)
+
+print(-max_heap[0])
+
+while max_heap:
+    print(heapq.heappop(max_heap))
+
+"""
+ソート(Sorting)
+sorted(): デフォルトは昇順のソート
+sort(): メソッド。引数とソートの順番を指定できる。
+    破壊的メソッドなので、元の配列が書き換えられる。
+    降順: reverse=True
+"""
+common.divider("ソート(Sorting)")
+# 昇順
+numbers = [3, 7, 5, 2, 4, 8, 5]
+sorted_nums = sorted(numbers)
+print(sorted_nums)
+
+# 降順
+numbers.sort(reverse=True)
+print(numbers)
+
+numbers.sort()
+print(numbers)
+
+
+## 文字列 辞書順にソートする
+fruits = ["orange", "apple", "banana", "grape"]
+fruits.sort()
+print(fruits)
+
+fruits.sort(reverse=True)
+print(fruits)
+
+## ソート基準のカスタマイズ
+## リストの文字列の長さでソートをする場合
+fruits.sort(key=lambda x: len(x))
+print(fruits)
+
+
+## 複数の要素でソートする
+## tupleを使用すれば、最初の要素から順に比較してソートされる。
+## 例えば出現回数順 -> 辞書順でソートしたい時などに使える。
+## list, heapq などでも同様の結果が得られる。
+vers = [(1, 2, 3), (1, 2, 2), (1, 1, 2)]
+vers.sort()
+print(vers)
+
+vers = [(1, 2, 3), (1, 2, 2), (1, 1, 4)]
+vers.sort()
+print(vers)
+
+
+# 数字と文字の組み合わせでも。
+money_fruits = [(200, "grapes"), (100, "grapes"), (200, "banana")]
+money_fruits.sort()
+print(money_fruits)
+
+"""
+bisect
+二分探索 binary_search
+"""
+
+nums = [1, 2, 3, 4, 7, 7, 7, 7, 8, 12, 35]
+# 値 7 を二分探索して、見つかった複数の7の内、最小(左端)のインデックスを返す
+# numsにおいて値が7のlower bound(7以上の数字が出現する中での最小のインデックス)
+print(bisect_left(nums, 7))
+
+# 値 7 を二分探索して、見つかった複数の7の内、最大(右端) + 1 のインデックスを返す
+# numsにおいて値が7のupper bound + 1 (7より大きい数字が出現する中での最小のインデックス)
+print(bisect_right(nums, 7))
+
+print(bisect_left(nums, 13))
+print(bisect_right(nums, 13))
+
+"""
+Sorted Containers
+"""
+# SortedSet
+# 常にソートされた Set のデータ構造
+sorted_set = SortedSet([3, 3, 1, 1, 5, 2])
+print(sorted_set)
+
+sorted_set.add(4)  # 追加
+print(sorted_set)
+sorted_set.add(3)  # 同じ値は追加されない。
+print(sorted_set)
+sorted_set.discard(3)  # 削除
+print(sorted_set)
+print(sorted_set.bisect_left(2))
+print(sorted_set.bisect_right(2))
+
+
+# SortedList
+# 常にソートされたList のデータ構造。重複が許容される。
+sorted_list = SortedList([3, 1, 5, 2])
+print(sorted_list)  # SortedList([1, 2, 3, 5])
+
+# O(logN)
+sorted_list.add(5)
+print(sorted_list)  # SortedList([1, 2, 3, 5, 5])
+sorted_list.add(4)
+print(sorted_list)  # SortedList([1, 2, 3, 4, 5, 5])
+
+print(sorted_list.bisect_left(3))
+print(sorted_list.bisect_right(3))
+
+# SortedDict
+# Dict の要素がソートされている
+sorted_dict = SortedDict({"apple": 300, "oragne": 200, "banana": 100})
+
+print(sorted_dict)  # SortedDict({'apple': 300, 'banana': 100, 'oragne': 200})
+
+print(sorted_dict.items())
+print(sorted_dict.keys())
+print(sorted_dict.values())
+
+for k, v in sorted_dict.items():
+    print(k)
+    print(v)
