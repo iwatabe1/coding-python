@@ -43,14 +43,19 @@ print(minus)
 
 sum = val_int + minus
 print(sum)
-# float: 浮動小数展、小数点を含む数値
+"""
+float: 浮動小数点、小数点を含む数値
+"""
 common.divider("float")
 val_float = 11.03
 print(val_float)
-# bool: 真偽値。True / False (先頭は大文字)
+"""
+bool: 真偽値。True / False (先頭は大文字)
+"""
 positive = True
 negative = False
-
+b = bool()
+print(b)
 print(positive, negative)
 
 
@@ -140,7 +145,7 @@ set:
 common.divider("set")
 
 # initizlize and add values
-hash_set = set()  # 定義
+hash_set = set()  # 定: 注意:{} だけだとDictionary
 hash_set.add(1)  # 追加
 print(hash_set)
 hash_set.add(2)
