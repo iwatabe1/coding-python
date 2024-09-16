@@ -140,7 +140,7 @@ set:
 common.divider("set")
 
 # initizlize and add values
-hash_set = set()  # 定義
+hash_set = set()  # 定: 注意:{} だけだとDictionary
 hash_set.add(1)  # 追加
 print(hash_set)
 hash_set.add(2)
