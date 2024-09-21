@@ -1,5 +1,8 @@
 # coding-python
 
+## How to inport txt file as standart input
+* `sample.py < input.txt`
+
 ### create virtual environment:
 * Create viratual env
     * `python -m venv .env`
